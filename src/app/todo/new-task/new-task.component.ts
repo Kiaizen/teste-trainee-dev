@@ -34,19 +34,25 @@ export class NewTaskComponent implements OnInit, OnDestroy {
   }
 
   addTask() {
-    if (this.newTaskTitle != '' && this.newTaskTitle.trim()) {
-      if (this.editingTodo) {
-        const updatedTodo: Todo = {
-          ...this.editingTodo,
-          title: this.newTaskTitle,
-        };
-        this.todoService.updateTodo(updatedTodo);
-      } else {
-        this.createNewTodos();
-      }
-
+    this.newTaskTitle = this.todoService.filter(this.newTaskTitle)
+    if(this.newTaskTitle.includes("*")){
+      alert("Não é permitido cadastrar tarefas com palavras obscenas.")
       this.newTaskTitle = '';
-      this.editingTodo = null;
+    }else{
+      if (this.newTaskTitle != '' && this.newTaskTitle.trim()) {
+        if (this.editingTodo) {
+          const updatedTodo: Todo = {
+            ...this.editingTodo,
+            title: this.newTaskTitle,
+          };
+          this.todoService.updateTodo(updatedTodo);
+        } else {
+          this.createNewTodos();
+        }
+  
+        this.newTaskTitle = '';
+        this.editingTodo = null;
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Todo } from '../models/todo.model';
+import { Filter } from 'bad-words';
 
 @Injectable({
   providedIn: 'root',
@@ -71,6 +72,11 @@ export class TodoService {
     this.todos.push(...newTodos);
     this.sortCompletedTodos();
     this.updateLocalStorageAndSave();
+  }
+
+  filter(badword:string){
+    const filter = new Filter()
+    return filter.clean(badword)
   }
 
   taskChecked(taskCheckedTodo: Todo): void {

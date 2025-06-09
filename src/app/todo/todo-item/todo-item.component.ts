@@ -19,7 +19,12 @@ export class TodoItemComponent {
     }
   }
 
+  updateTodo(): void {
+    // Envia o todo para ser editado
+    this.todoService.setEditingTodo(this.todo);
+  }
+
   onTaskChecked(): void {
-    this.todoService.updateTodo(this.todo);
+    this.todoService.taskChecked(this.todo);
   }
 }

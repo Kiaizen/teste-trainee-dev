@@ -33,8 +33,8 @@ export class TodoComponent implements OnInit {
     this.todoService.addTodo(newTodo);
   }
 
-  updateTodo(updatedTodo: Todo) {
-    this.todoService.updateTodo(updatedTodo);
+  taskCheckedTodo(taskCheckedTodo: Todo) {
+    this.todoService.taskChecked(taskCheckedTodo);
   }
 
   deleteTodo(todoId: number) {

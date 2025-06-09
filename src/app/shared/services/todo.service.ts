@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Todo } from '../models/todo.model';
 
 @Injectable({
@@ -7,6 +7,9 @@ import { Todo } from '../models/todo.model';
 })
 export class TodoService {
   private todos!: Todo[];
+  private editingTodoSubject = new BehaviorSubject<Todo | null>(null);
+  
+  editingTodo$ = this.editingTodoSubject.asObservable();
 
   constructor() {
     this.loadFromLocalStorage();
@@ -42,12 +45,29 @@ export class TodoService {
     this.updateLocalStorageAndSave();
   }
 
+  taskChecked(taskCheckedTodo: Todo): void {
+    const index = this.todos.findIndex(todo => todo.id === taskCheckedTodo.id);
+    if (index !== -1) {
+      this.todos[index] = taskCheckedTodo;
+      this.sortTodos();
+      this.updateLocalStorageAndSave();
+    }
+  }
+
+  // Método para definir qual todo está sendo editado
+  setEditingTodo(todo: Todo): void {
+    this.editingTodoSubject.next(todo);
+  }
+
+  // Método para atualizar o todo
   updateTodo(updatedTodo: Todo): void {
     const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
     if (index !== -1) {
       this.todos[index] = updatedTodo;
       this.sortTodos();
       this.updateLocalStorageAndSave();
+      // Limpar o estado de edição
+      this.editingTodoSubject.next(null);
     }
   }
 

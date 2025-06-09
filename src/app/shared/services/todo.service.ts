@@ -67,6 +67,12 @@ export class TodoService {
     this.updateLocalStorageAndSave();
   }
 
+  addMultipleTodos(newTodos: Todo[]): void {
+    this.todos.push(...newTodos);
+    this.sortCompletedTodos();
+    this.updateLocalStorageAndSave();
+  }
+
   taskChecked(taskCheckedTodo: Todo): void {
     const index = this.todos.findIndex(
       (todo) => todo.id === taskCheckedTodo.id
@@ -119,16 +125,16 @@ export class TodoService {
       }
     });
   }
-sortTodosAZ(): void {
-  const incompletos = this.todos
-    .filter(todo => !todo.completed)
-    .sort((a, b) => a.title.localeCompare(b.title));
+  sortTodosAZ(): void {
+    const incompletos = this.todos
+      .filter((todo) => !todo.completed)
+      .sort((a, b) => a.title.localeCompare(b.title));
 
-  const completos = this.todos.filter(todo => todo.completed);
+    const completos = this.todos.filter((todo) => todo.completed);
 
-  this.todos = [...incompletos, ...completos];
-  this.updateLocalStorageAndSave();
-}
+    this.todos = [...incompletos, ...completos];
+    this.updateLocalStorageAndSave();
+  }
 
   clearAll() {
     this.todos = [];

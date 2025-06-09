@@ -36,24 +36,44 @@ export class NewTaskComponent implements OnInit, OnDestroy {
   addTask() {
     if (this.newTaskTitle != '' && this.newTaskTitle.trim()) {
       if (this.editingTodo) {
-        // Está editando um todo existente
         const updatedTodo: Todo = {
           ...this.editingTodo,
           title: this.newTaskTitle,
         };
         this.todoService.updateTodo(updatedTodo);
       } else {
-        // Criando um novo todo
-        const newTodo: Todo = {
-          id: this.todoService.getTodoNewId(),
-          title: this.newTaskTitle,
-          completed: false,
-        };
-        this.todoService.addTodo(newTodo);
+        this.createNewTodos();
       }
 
       this.newTaskTitle = '';
       this.editingTodo = null;
+    }
+  }
+
+   private createNewTodos(): void {
+    // Verifica se contém o separador |
+    if (this.newTaskTitle.includes('|')) {
+      // Divide o texto pelo separador | e cria múltiplas tarefas
+      const taskTitles = this.newTaskTitle
+        .split('|')
+        .map(title => title.trim())
+        .filter(title => title.length > 0); // Remove títulos vazios
+
+      // Cria todas as tarefas de uma vez
+      const newTodos: Todo[] = taskTitles.map(title => ({
+        id: this.todoService.getTodoNewId(),
+        title: title,
+        completed: false
+      }));
+
+      this.todoService.addMultipleTodos(newTodos);
+    } else {
+      const newTodo: Todo = {
+        id: this.todoService.getTodoNewId(),
+        title: this.newTaskTitle,
+        completed: false
+      };
+      this.todoService.addTodo(newTodo);
     }
   }
 

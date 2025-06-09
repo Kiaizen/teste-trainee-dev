@@ -34,7 +34,7 @@ export class NewTaskComponent implements OnInit, OnDestroy {
   }
 
   addTask() {
-    if (this.newTaskTitle != '') {
+    if (this.newTaskTitle != '' && this.newTaskTitle.trim()) {
       if (this.editingTodo) {
         // Está editando um todo existente
         const updatedTodo: Todo = {

@@ -3,6 +3,7 @@
     <app-new-task></app-new-task>
   </div>
   <div class="todo-buttons">
+    <button (click)="sortTodos()">Ordenar de A a Z</button>
     <button class="toggle-button" (click)="toggleCompletedTasks()">
       {{ !showCompletedTasks ? 'Exibir Tarefas Concluídas' : 'Ocultar Tarefas Concluídas' }}
     </button>

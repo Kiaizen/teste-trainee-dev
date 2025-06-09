@@ -66,4 +66,7 @@ export class TodoComponent implements OnInit {
   get labelClearAll(){
     return 'Limpar Tudo'
   }
+  sortTodos(){
+    this.todoService.sortTodosAZ();
+  }
 }

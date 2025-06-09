@@ -3,12 +3,12 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Todo } from '../models/todo.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TodoService {
   private todos!: Todo[];
   private editingTodoSubject = new BehaviorSubject<Todo | null>(null);
-  
+
   editingTodo$ = this.editingTodoSubject.asObservable();
 
   constructor() {
@@ -21,14 +21,36 @@ export class TodoService {
 
   private loadFromLocalStorage(): void {
     const todosJson = localStorage.getItem('todos');
-    this.todos = todosJson ? JSON.parse(todosJson) : [
-      { id: 1, title: 'make an awesome angular todo-list', completed: true },
-      { id: 2, title: 'deploy my awesome angular todo-list project on github.io', completed: true },
-      { id: 3, title: 'think about tasks I can example on my to do list project', completed: false },
-      { id: 4, title: 'give up about the exemples (you already have them)', completed: false },
-      { id: 5, title: "what can I do next? Let's do a new project! :)", completed: false }
-    ];
-    this.sortTodos();
+    this.todos = todosJson
+      ? JSON.parse(todosJson)
+      : [
+          {
+            id: 1,
+            title: 'make an awesome angular todo-list',
+            completed: true,
+          },
+          {
+            id: 2,
+            title: 'deploy my awesome angular todo-list project on github.io',
+            completed: true,
+          },
+          {
+            id: 3,
+            title: 'think about tasks I can example on my to do list project',
+            completed: false,
+          },
+          {
+            id: 4,
+            title: 'give up about the exemples (you already have them)',
+            completed: false,
+          },
+          {
+            id: 5,
+            title: "what can I do next? Let's do a new project! :)",
+            completed: false,
+          },
+        ];
+    this.sortCompletedTodos();
   }
 
   getTodos(): Observable<Todo[]> {
@@ -41,15 +63,17 @@ export class TodoService {
 
   addTodo(newTodo: Todo): void {
     this.todos.push(newTodo);
-    this.sortTodos();
+    this.sortCompletedTodos();
     this.updateLocalStorageAndSave();
   }
 
   taskChecked(taskCheckedTodo: Todo): void {
-    const index = this.todos.findIndex(todo => todo.id === taskCheckedTodo.id);
+    const index = this.todos.findIndex(
+      (todo) => todo.id === taskCheckedTodo.id
+    );
     if (index !== -1) {
       this.todos[index] = taskCheckedTodo;
-      this.sortTodos();
+      this.sortCompletedTodos();
       this.updateLocalStorageAndSave();
     }
   }
@@ -61,10 +85,10 @@ export class TodoService {
 
   // Método para atualizar o todo
   updateTodo(updatedTodo: Todo): void {
-    const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
+    const index = this.todos.findIndex((todo) => todo.id === updatedTodo.id);
     if (index !== -1) {
       this.todos[index] = updatedTodo;
-      this.sortTodos();
+      this.sortCompletedTodos();
       this.updateLocalStorageAndSave();
       // Limpar o estado de edição
       this.editingTodoSubject.next(null);
@@ -72,10 +96,10 @@ export class TodoService {
   }
 
   deleteTodo(todoId: number): void {
-    const index = this.todos.findIndex(todo => todo.id === todoId);
+    const index = this.todos.findIndex((todo) => todo.id === todoId);
     if (index !== -1) {
       this.todos.splice(index, 1);
-      this.sortTodos();
+      this.sortCompletedTodos();
       this.updateLocalStorageAndSave();
     }
   }
@@ -84,7 +108,7 @@ export class TodoService {
     return this.todos.reduce((maxId, todo) => Math.max(maxId, todo.id), 0) + 1;
   }
 
-  sortTodos() {
+  sortCompletedTodos() {
     this.todos.sort((a, b) => {
       if (a.completed && !b.completed) {
         return 1;
@@ -94,6 +118,14 @@ export class TodoService {
         return 0;
       }
     });
+  }
+  sortTodosAZ() {
+    this.todos.sort((a, b) => {
+      if (a.completed && !b.completed) return 1;
+      if (!a.completed && b.completed) return -1;
+      return a.title.localeCompare(b.title);
+    });
+    this.updateLocalStorageAndSave();
   }
 
   clearAll() {

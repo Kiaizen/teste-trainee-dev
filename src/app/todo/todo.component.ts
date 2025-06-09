@@ -68,5 +68,7 @@ export class TodoComponent implements OnInit {
   }
   sortTodos(){
     this.todoService.sortTodosAZ();
+    this.loadTodos();
+    this.todos = this.filteredTodos();
   }
 }

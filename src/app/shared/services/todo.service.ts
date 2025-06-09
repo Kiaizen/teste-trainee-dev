@@ -119,14 +119,16 @@ export class TodoService {
       }
     });
   }
-  sortTodosAZ() {
-    this.todos.sort((a, b) => {
-      if (a.completed && !b.completed) return 1;
-      if (!a.completed && b.completed) return -1;
-      return a.title.localeCompare(b.title);
-    });
-    this.updateLocalStorageAndSave();
-  }
+sortTodosAZ(): void {
+  const incompletos = this.todos
+    .filter(todo => !todo.completed)
+    .sort((a, b) => a.title.localeCompare(b.title));
+
+  const completos = this.todos.filter(todo => todo.completed);
+
+  this.todos = [...incompletos, ...completos];
+  this.updateLocalStorageAndSave();
+}
 
   clearAll() {
     this.todos = [];

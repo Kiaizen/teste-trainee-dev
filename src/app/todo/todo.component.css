@@ -40,9 +40,24 @@
   width: 13rem;
 }
 
+.export-button{
+  margin: 10px;
+  width: 100%;
+  font-weight: 700;
+  cursor: pointer;
+  color: #413F3F;
+  border:  1px solid #413F3F;
+  padding: 0 0.5rem;
+  box-shadow: 1px 1px;
+  border-radius: 0.2rem;
+}
+
+.export-button:active{
+  background-color: #6a5151;
+}
+
 .todo-buttons button {
   background-color: transparent;
-  border: none;
   font-weight: 700;
   cursor: pointer;
   color: #413F3F;

@@ -17,7 +17,6 @@ export class NewTaskComponent implements OnInit, OnDestroy {
   constructor(private todoService: TodoService) {}
 
   ngOnInit(): void {
-    // Inscreve-se para receber notificações de edição
     this.editingSubscription = this.todoService.editingTodo$.subscribe(
       (todo) => {
         this.editingTodo = todo;
@@ -58,15 +57,12 @@ export class NewTaskComponent implements OnInit, OnDestroy {
   }
 
    private createNewTodos(): void {
-    // Verifica se contém o separador |
     if (this.newTaskTitle.includes('|')) {
-      // Divide o texto pelo separador | e cria múltiplas tarefas
       const taskTitles = this.newTaskTitle
         .split('|')
         .map(title => title.trim())
-        .filter(title => title.length > 0); // Remove títulos vazios
+        .filter(title => title.length > 0); 
 
-      // Cria todas as tarefas de uma vez
       const newTodos: Todo[] = taskTitles.map(title => ({
         id: this.todoService.getTodoNewId(),
         title: title,

@@ -91,12 +91,10 @@ export class TodoService {
     }
   }
 
-  // Método para definir qual todo está sendo editado
   setEditingTodo(todo: Todo): void {
     this.editingTodoSubject.next(todo);
   }
 
-  // Método para atualizar o todo
   updateTodo(updatedTodo: Todo): void {
     const index = this.todos.findIndex((todo) => todo.id === updatedTodo.id);
     if (index !== -1) {

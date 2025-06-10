@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Todo } from '../../shared/models/todo.model';
 import { TodoService } from 'src/app/shared/services/todo.service';
 import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-new-task',
@@ -36,7 +37,7 @@ export class NewTaskComponent implements OnInit, OnDestroy {
   addTask() {
     this.newTaskTitle = this.todoService.filter(this.newTaskTitle)
     if(this.newTaskTitle.includes("*")){
-      alert("Não é permitido cadastrar tarefas com palavras obscenas.")
+      Swal.fire("Não é permitido cadastrar tarefas com palavras obscenas.")
       this.newTaskTitle = '';
     }else{
       if (this.newTaskTitle != '' && this.newTaskTitle.trim()) {

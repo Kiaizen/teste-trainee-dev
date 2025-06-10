@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { Todo } from '../models/todo.model';
 import { Filter } from 'bad-words';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root',
@@ -74,9 +75,9 @@ export class TodoService {
     this.updateLocalStorageAndSave();
   }
 
-  filter(badword:string){
-    const filter = new Filter()
-    return filter.clean(badword)
+  filter(badword: string) {
+    const filter = new Filter();
+    return filter.clean(badword);
   }
 
   taskChecked(taskCheckedTodo: Todo): void {
@@ -148,9 +149,24 @@ export class TodoService {
   }
 
   clearCompletedTasks() {
-    if (confirm('Você tem certeza que quer limpar as tarefas concluídas?')) {
-      this.todos = this.todos.filter(({ completed }) => completed === false);
-      this.updateLocalStorageAndSave();
-    }
+    Swal.fire({
+      title: 'Você tem certeza?',
+      text: 'Você tem certeza que quer limpar as tarefas concluídas?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, deleta!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Pronto!',
+          text: 'Sua lista foi limpa.',
+          icon: 'success',
+        });
+        this.todos = this.todos.filter(({ completed }) => completed === false);
+        this.updateLocalStorageAndSave();
+      }
+    });
   }
 }

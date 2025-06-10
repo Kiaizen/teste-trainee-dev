@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Todo } from '../shared/models/todo.model';
 import { TodoService } from '../shared/services/todo.service';
 import jsPDF from 'jspdf';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-todo',
@@ -43,12 +44,26 @@ export class TodoComponent implements OnInit {
   }
 
   clearAll() {
-    if (
-      this.todos.length > 0 &&
-      confirm('Are you sure you want to clear all tasks?')
-    ) {
-      this.todoService.clearAll();
-      this.loadTodos();
+    if (this.todos.length > 0) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to clear all the todos?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Your file has been deleted.',
+            icon: 'success',
+          });
+          this.todoService.clearAll();
+          this.loadTodos();
+        }
+      });
     }
   }
 
